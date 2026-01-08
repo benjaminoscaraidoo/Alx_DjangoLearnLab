@@ -1,4 +1,4 @@
-from app_name.models import Book
+from bookshelf.models import Book
 
 book = Book.objects.create(
     title="1984",
