@@ -15,7 +15,7 @@ def list_books(request):
     return render(request, 'relationship_app/list_books.html', context)
 
 
-class BookDetailView(DetailView):
+class LibraryDetailView(DetailView):
   """A class-based view for displaying details of a specific book."""
   model = Book
   template_name = 'relationship_app/library_detail.html'
