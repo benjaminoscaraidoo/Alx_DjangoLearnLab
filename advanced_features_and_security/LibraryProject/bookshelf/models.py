@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
@@ -10,8 +10,9 @@ class Book(models.Model):
     publication_year = models.IntegerField(default=0)
 
 
-class CustomUser(AbstractBaseUser):
+class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=20)
     date_of_birth = models.DateField()
     profile_photo = models.ImageField()
+
