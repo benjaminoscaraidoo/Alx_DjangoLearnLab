@@ -40,3 +40,6 @@ class CustomUserAdmin(UserAdmin):
     )
 
     search_fields = ("username", "email")
+
+
+admin.site.register(CustomUser, CustomUserAdmin)
