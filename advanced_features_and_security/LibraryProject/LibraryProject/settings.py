@@ -24,7 +24,7 @@ print("BASE_DIR:", BASE_DIR)
 SECRET_KEY = 'django-insecure-qzg3ad!0jho52d^(f)v-j&x*9jb)#=2(z*v65&kt%b1u)*&px+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -81,6 +81,16 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+SECURE_BROWSER_XSS_FILTER = True 
+
+X_FRAME_OPTIONS = "DENY"
+
+CSRF_COOKIE_SECURE = True           # Prevents cookie theft
+SESSION_COOKIE_SECURE = True        # Forces HTTPS for session cookies
 
 
 # Password validation
