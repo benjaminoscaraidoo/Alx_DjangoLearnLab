@@ -29,11 +29,23 @@ class CustomUserManager(BaseUserManager):
             raise ValueError("Superuser must have is_superuser=True.")
 
         return self.create_user(username, email, password, **extra_fields)
+    
+    
 class Book(models.Model):
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=100)
     publication_year = models.IntegerField(default=0)
 
+    class Meta:
+        permissions = [
+            ("can_view", "Can view articles"),
+            ("can_create", "Can create articles"),
+            ("can_edit", "Can edit articles"),
+            ("can_delete", "Can delete articles"),
+        ]
+    
+    def __str__(self):
+        return f"{self.title} by {self.author} ({self.publication_year})"
 
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
