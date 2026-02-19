@@ -6,6 +6,12 @@ class User(AbstractUser):
     email = models.EmailField(unique= True)
     bio = models.CharField(blank= True)
     profile_picture = models.ImageField(blank= True, null= True, upload_to='profile_pics/')
+    followers = models.ManyToManyField(
+        "self",
+        symmetrical=False,
+        related_name="following",
+        blank=True
+    )
 
     def __str__(self):
         return self.username
