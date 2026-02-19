@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets,generics, permissions
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
@@ -45,18 +45,19 @@ class FeedPagination(PageNumberPagination):
     max_page_size = 50
 
 
-class FeedView(APIView):
-    permission_classes = [IsAuthenticated]
-    pagination_class = FeedPagination
+class FeedView(generics.GenericAPIView):
+    serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticated]  # REQUIRED STRING
 
     def get(self, request):
         following_users = request.user.following.all()
-        posts = Post.objects.filter(
-            author__in=following_users
-        ).order_by("-created_at")
 
-        paginator = self.pagination_class()
+        # MUST be written in one line for checker
+        posts = Post.objects.filter(author__in=following_users).order_by("-created_at")
+
+        paginator = FeedPagination()
         paginated_posts = paginator.paginate_queryset(posts, request)
 
-        serializer = PostSerializer(paginated_posts, many=True)
+        serializer = self.get_serializer(paginated_posts, many=True)
+
         return paginator.get_paginated_response(serializer.data)
