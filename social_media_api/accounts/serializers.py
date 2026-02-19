@@ -6,7 +6,6 @@ from django.contrib.auth.decorators import user_passes_test
 from rest_framework import serializers
 from .models import Follow
 
-
 User = get_user_model()
 
 class UserSerializer(serializers.Serializer):
