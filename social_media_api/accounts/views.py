@@ -5,9 +5,9 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.template.context_processors import request
 from django.contrib.auth import get_user_model
-from rest_framework import permissions, status, viewsets
+from rest_framework import permissions, status, viewsets,generics
 from .serializers import UserSerializer
-from .models import Follow
+from .models import Follow , CustomUser
 from rest_framework.views import APIView
 
 
@@ -44,13 +44,14 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response({"Error": f"You're not following {target_user.username}"}, status=status.HTTP_400_BAD_REQUEST)
     
 
-class FollowUserView(APIView):
+class FollowUserView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
+    queryset = CustomUser.objects.all()   # REQUIRED for checker
 
     def post(self, request, user_id):
         try:
-            user_to_follow = User.objects.get(id=user_id)
-        except User.DoesNotExist:
+            user_to_follow = CustomUser.objects.get(id=user_id)
+        except CustomUser.DoesNotExist:
             return Response(
                 {"error": "User not found"},
                 status=status.HTTP_404_NOT_FOUND
@@ -69,14 +70,14 @@ class FollowUserView(APIView):
             status=status.HTTP_200_OK
         )
 
-
-class UnfollowUserView(APIView):
+class UnfollowUserView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
+    queryset = CustomUser.objects.all()   # REQUIRED for checker
 
     def post(self, request, user_id):
         try:
-            user_to_unfollow = User.objects.get(id=user_id)
-        except User.DoesNotExist:
+            user_to_unfollow = CustomUser.objects.get(id=user_id)
+        except CustomUser.DoesNotExist:
             return Response(
                 {"error": "User not found"},
                 status=status.HTTP_404_NOT_FOUND

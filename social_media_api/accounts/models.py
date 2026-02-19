@@ -2,7 +2,7 @@ from django.db import models
 from django.forms import CharField, IntegerField
 from django.contrib.auth.models import AbstractUser
 
-class User(AbstractUser):
+class CustomUser(AbstractUser):
     email = models.EmailField(unique= True)
     bio = models.TextField(blank=True)
     profile_picture = models.ImageField(blank= True, null= True, upload_to='profile_pics/')
@@ -24,8 +24,8 @@ class User(AbstractUser):
         return self.username
     
 class Follow(models.Model):
-    follower = models.ForeignKey(User, related_name= 'following', on_delete= models.CASCADE)
-    following = models.ForeignKey(User, related_name= 'followers', on_delete= models.CASCADE)
+    follower = models.ForeignKey(CustomUser, related_name= 'following', on_delete= models.CASCADE)
+    following = models.ForeignKey(CustomUser, related_name= 'followers', on_delete= models.CASCADE)
     created_at = models.DateTimeField(auto_now_add= True)
 
     class Meta:
