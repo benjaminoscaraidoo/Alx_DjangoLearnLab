@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 
+User = settings.AUTH_USER_MODEL
 
 class Post(models.Model):
     author = models.ForeignKey(
@@ -40,3 +42,23 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.author}"
+
+class Like(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="likes"
+    )
+    post = models.ForeignKey(
+        "posts.Post",
+        on_delete=models.CASCADE,
+        related_name="likes"
+    )
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        unique_together = ("user", "post")  # Prevent duplicate likes
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.user} liked {self.post}"

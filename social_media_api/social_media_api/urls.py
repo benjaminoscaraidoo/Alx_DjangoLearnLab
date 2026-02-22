@@ -31,6 +31,7 @@ urlpatterns = [
 
     path("api/accounts/", include("accounts.urls")),
     path("api/posts/", include("posts.urls")),
+    path("notifications/", include("notifications.urls")),
 ]
 
 if settings.DEBUG:
