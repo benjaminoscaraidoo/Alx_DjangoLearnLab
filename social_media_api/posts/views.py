@@ -70,12 +70,11 @@ class FeedView(generics.GenericAPIView):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def like_post(request, pk):
-    post = get_object_or_404(Post, pk=pk)
 
-    like, created = Like.objects.get_or_create(
-        user=request.user,
-        post=post
-    )
+    post = generics.get_object_or_404(Post, pk=pk)
+
+
+    like, created = Like.objects.get_or_create(user=request.user, post=post)
 
     if not created:
         return Response(
@@ -93,25 +92,28 @@ def like_post(request, pk):
             object_id=post.id,
         )
 
-    return Response({"detail": "Post liked."}, status=status.HTTP_201_CREATED)
+    return Response(
+        {"detail": "Post liked successfully."},
+        status=status.HTTP_201_CREATED
+    )
 
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def unlike_post(request, pk):
-    post = get_object_or_404(Post, pk=pk)
+    post = generics.get_object_or_404(Post, pk=pk)
 
-    like = Like.objects.filter(
-        user=request.user,
-        post=post
-    ).first()
+    like = Like.objects.filter(user=request.user, post=post).first()
 
     if not like:
         return Response(
-            {"detail": "You haven't liked this post."},
+            {"detail": "You have not liked this post."},
             status=status.HTTP_400_BAD_REQUEST
         )
 
     like.delete()
 
-    return Response({"detail": "Post unliked."}, status=status.HTTP_200_OK)
+    return Response(
+        {"detail": "Post unliked successfully."},
+        status=status.HTTP_200_OK
+    )
